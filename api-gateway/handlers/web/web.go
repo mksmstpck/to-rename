@@ -20,4 +20,5 @@ func NewWeb(echo *echo.Echo, nc *nats.Conn) *Web {
 func (w *Web) All(e *echo.Echo) {
 	u := w.e.Group("/users")
 	u.POST("/", w.UserCreate)
+	u.GET("/:id", w.UserGet)
 }

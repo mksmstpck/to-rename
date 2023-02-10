@@ -21,3 +21,12 @@ func (w *Web) UserCreate(c echo.Context) error {
 	}
 	return c.JSON(http.StatusCreated, u)
 }
+
+func (w *Web) UserGet(c echo.Context) error {
+	id := c.Param("id")
+	u, err := events.NewPub(w.nconn).GetUser([]byte(id))
+	if err != nil {
+		return c.JSON(http.StatusNotFound, err.Error())
+	}
+	return c.JSON(http.StatusOK, u)
+}

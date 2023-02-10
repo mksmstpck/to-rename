@@ -7,7 +7,7 @@ import (
 	"github.com/mksmstpck/to-rename/api-gateway/models"
 )
 
-func (p *Pub) GetUser(id []byte) (models.User, error) {
+func (p *Pub) UserGet(id []byte) (models.User, error) {
 	var user models.User
 	m, err := p.conn.Request("users-get", id, 10*time.Millisecond)
 	if err != nil {
@@ -17,7 +17,7 @@ func (p *Pub) GetUser(id []byte) (models.User, error) {
 	return user, nil
 }
 
-func (p *Pub) WriteUser(user models.User) error {
+func (p *Pub) UserWrite(user models.User) error {
 	var res models.Response
 	userBytes, err := sonic.Marshal(user)
 	if err != nil {
@@ -37,7 +37,7 @@ func (p *Pub) WriteUser(user models.User) error {
 	return nil
 }
 
-func (p *Pub) UpdateUser(user models.User) error {
+func (p *Pub) UserUpdate(user models.User) error {
 	var res models.Response
 	userBytes, err := sonic.Marshal(user)
 	if err != nil {

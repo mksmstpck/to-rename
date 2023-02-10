@@ -56,3 +56,19 @@ func (p *Pub) UserUpdate(user models.User) error {
 	}
 	return nil
 }
+
+func (p *Pub) UserDelete(id []byte) error {
+	var res models.Response
+	m, err := p.conn.Request("users-delete", id, 10*time.Millisecond)
+	if err != nil {
+		return err
+	}
+	sonic.Unmarshal(m.Data, &res)
+	if res.Status == "ok" {
+		return nil
+	}
+	if res.Status != "ok" {
+		return err
+	}
+	return nil
+}

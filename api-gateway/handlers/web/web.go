@@ -22,4 +22,5 @@ func (w *Web) All(e *echo.Echo) {
 	u.POST("/", w.UserCreate)
 	u.GET("/:id", w.UserGet)
 	u.PUT("/", w.UserUpdate)
+	u.DELETE("/:id", w.UserDelete)
 }

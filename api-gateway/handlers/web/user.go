@@ -44,3 +44,11 @@ func (w *Web) UserUpdate(c echo.Context) error {
 	}
 	return c.JSON(http.StatusOK, u)
 }
+
+func (w *Web) UserDelete(c echo.Context) error {
+	id := c.Param("id")
+	if err := events.NewPub(w.nconn).UserDelete([]byte(id)); err != nil {
+		return c.JSON(http.StatusNotFound, err.Error())
+	}
+	return c.JSON(http.StatusOK, id)
+}

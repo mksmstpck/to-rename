@@ -7,17 +7,24 @@ import (
 	"github.com/mksmstpck/to-rename/api-gateway/models"
 )
 
-func (p *Pub) UserGet(id []byte) (models.User, error) {
+type UserPublisher interface {
+	UserGet(id []byte) (models.User, error)
+	UserPost(user models.User) error
+	UserPut(user models.User) error
+	UserDelete(id []byte) error
+}
+
+func (p Pub) UserGet(id []byte) (models.User, error) {
 	var user models.User
 	m, err := p.conn.Request("users-get", id, 10*time.Millisecond)
 	if err != nil {
-		panic(err)
+		return user, err
 	}
 	sonic.Unmarshal(m.Data, &user)
 	return user, nil
 }
 
-func (p *Pub) UserWrite(user models.User) error {
+func (p Pub) UserPost(user models.User) error {
 	var res models.Response
 	userBytes, err := sonic.Marshal(user)
 	if err != nil {
@@ -31,13 +38,10 @@ func (p *Pub) UserWrite(user models.User) error {
 	if res.Status == "ok" {
 		return nil
 	}
-	if res.Status != "ok" {
-		return err
-	}
-	return nil
+	return err
 }
 
-func (p *Pub) UserUpdate(user models.User) error {
+func (p Pub) UserPut(user models.User) error {
 	var res models.Response
 	userBytes, err := sonic.Marshal(user)
 	if err != nil {
@@ -51,13 +55,10 @@ func (p *Pub) UserUpdate(user models.User) error {
 	if res.Status == "ok" {
 		return nil
 	}
-	if res.Status != "ok" {
-		return err
-	}
-	return nil
+	return err
 }
 
-func (p *Pub) UserDelete(id []byte) error {
+func (p Pub) UserDelete(id []byte) error {
 	var res models.Response
 	m, err := p.conn.Request("users-delete", id, 10*time.Millisecond)
 	if err != nil {
@@ -67,8 +68,5 @@ func (p *Pub) UserDelete(id []byte) error {
 	if res.Status == "ok" {
 		return nil
 	}
-	if res.Status != "ok" {
-		return err
-	}
-	return nil
+	return err
 }

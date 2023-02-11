@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/labstack/echo/v4"
+	"github.com/mksmstpck/to-rename/api-gateway/events"
 	handlers "github.com/mksmstpck/to-rename/api-gateway/handlers/web"
 	"github.com/nats-io/nats.go"
 )
@@ -17,7 +18,8 @@ func main() {
 
 	//starts echo
 	e := echo.New()
-	handlers := handlers.NewWeb(e, nc)
-	handlers.All(e)
+	userEvents := events.NewPub(nc)
+	handlers := handlers.NewWeb(e, nc, userEvents)
+	handlers.All()
 	e.Logger.Fatal(e.Start(":1323"))
 }

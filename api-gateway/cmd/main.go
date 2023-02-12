@@ -18,8 +18,8 @@ func main() {
 
 	//starts echo
 	e := echo.New()
-	userEvents := events.NewPub(nc)
-	handlers := handlers.NewWeb(e, nc, userEvents)
+	pub := events.NewPub(nc)
+	handlers := handlers.NewWeb(e, nc, pub)
 	handlers.All()
 	e.Logger.Fatal(e.Start(":1323"))
 }

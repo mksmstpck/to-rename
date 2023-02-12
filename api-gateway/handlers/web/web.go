@@ -25,9 +25,22 @@ func NewWeb(echo *echo.Echo, nc *nats.Conn, pub *events.Pub) *Web {
 }
 
 func (w *Web) All() {
-	u := w.e.Group("/users")
-	u.POST("/", w.UserCreate)
-	u.GET("/:id", w.UserRead)
-	u.PUT("/", w.UserUpdate)
-	u.DELETE("/:id", w.UserDelete)
+	user := w.e.Group("/users")
+	role := w.e.Group("/roles")
+	permission := w.e.Group("/permissions")
+	// user endpoints
+	user.POST("/", w.UserCreate)
+	user.GET("/:id", w.UserRead)
+	user.PUT("/", w.UserUpdate)
+	user.DELETE("/:id", w.UserDelete)
+	// role endpoints
+	role.POST("/", w.RoleCreate)
+	role.GET("/:id", w.RoleRead)
+	role.PUT("/", w.RoleUpdate)
+	role.DELETE("/:id", w.RoleDelete)
+	// permission endpoints
+	permission.POST("/", w.PermissionCreate)
+	permission.GET("/:id", w.PermissionRead)
+	permission.PUT("/", w.PermissionUpdate)
+	permission.DELETE("/:id", w.PermissionDelete)
 }

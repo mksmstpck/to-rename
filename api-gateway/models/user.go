@@ -1,17 +1,5 @@
 package models
 
-type Permission struct {
-	ID        string   `json:"id"`
-	Name      string   `json:"name" validate:"required,name"`
-	AllowedTo []string `json:"allowedTo" validate:"required,allowedTo"`
-}
-
-type Role struct {
-	ID          string       `json:"id"`
-	Name        string       `json:"name" validate:"required,name"`
-	Permissions []Permission `json:"permissions" validate:"required,permissions"`
-}
-
 type User struct {
 	ID       string `json:"id"`
 	Username string `json:"username" validate:"required,name"`

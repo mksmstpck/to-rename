@@ -21,7 +21,7 @@ func (w *Web) UserCreate(c echo.Context) error {
 	return c.JSON(http.StatusCreated, u)
 }
 
-func (w *Web) UserGet(c echo.Context) error {
+func (w *Web) UserRead(c echo.Context) error {
 	id := c.Param("id")
 	u, err := w.u.UserGet([]byte(id))
 	if err != nil {

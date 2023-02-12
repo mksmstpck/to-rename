@@ -6,5 +6,5 @@ type User struct {
 	FullName string `json:"fullName" validate:"required,fullname"`
 	Email    string `json:"email" validate:"required,email"`
 	Password string `json:"password" validate:"required,password"`
-	Role     Role   `json:"role" validate:"required,role"`
+	RoleID   string `json:"role" validate:"required,role"`
 }

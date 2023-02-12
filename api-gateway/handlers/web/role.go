@@ -15,7 +15,7 @@ func (w *Web) RoleCreate(c echo.Context) error {
 	if err := c.Validate(&r); err != nil {
 		return c.JSON(http.StatusBadRequest, err.Error())
 	}
-	if err := w.r.RolePost(r); err != nil {
+	if err := w.role.RolePost(r); err != nil {
 		return c.JSON(http.StatusInternalServerError, err.Error())
 	}
 	return c.JSON(http.StatusCreated, r)
@@ -23,7 +23,7 @@ func (w *Web) RoleCreate(c echo.Context) error {
 
 func (w *Web) RoleRead(c echo.Context) error {
 	id := c.Param("id")
-	r, err := w.r.RoleGet([]byte(id))
+	r, err := w.role.RoleGet([]byte(id))
 	if err != nil {
 		return c.JSON(http.StatusNotFound, err.Error())
 	}
@@ -38,7 +38,7 @@ func (w *Web) RoleUpdate(c echo.Context) error {
 	if err := c.Validate(&r); err != nil {
 		return c.JSON(http.StatusBadRequest, err.Error())
 	}
-	if err := w.r.RolePut(r); err != nil {
+	if err := w.role.RolePut(r); err != nil {
 		return c.JSON(http.StatusInternalServerError, err.Error())
 	}
 	return c.JSON(http.StatusOK, r)
@@ -46,7 +46,7 @@ func (w *Web) RoleUpdate(c echo.Context) error {
 
 func (w *Web) RoleDelete(c echo.Context) error {
 	id := c.Param("id")
-	if err := w.r.RoleDelete([]byte(id)); err != nil {
+	if err := w.role.RoleDelete([]byte(id)); err != nil {
 		return c.JSON(http.StatusNotFound, err.Error())
 	}
 	return c.JSON(http.StatusOK, id)

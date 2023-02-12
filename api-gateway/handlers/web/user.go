@@ -15,7 +15,7 @@ func (w *Web) UserCreate(c echo.Context) error {
 	if err := c.Validate(u); err != nil {
 		return c.JSON(http.StatusBadRequest, err.Error())
 	}
-	if err := w.u.UserPost(u); err != nil {
+	if err := w.user.UserPost(u); err != nil {
 		return c.JSON(http.StatusInternalServerError, err.Error())
 	}
 	return c.JSON(http.StatusCreated, u)
@@ -23,7 +23,7 @@ func (w *Web) UserCreate(c echo.Context) error {
 
 func (w *Web) UserRead(c echo.Context) error {
 	id := c.Param("id")
-	u, err := w.u.UserGet([]byte(id))
+	u, err := w.user.UserGet([]byte(id))
 	if err != nil {
 		return c.JSON(http.StatusNotFound, err.Error())
 	}
@@ -38,7 +38,7 @@ func (w *Web) UserUpdate(c echo.Context) error {
 	if err := c.Validate(u); err != nil {
 		return c.JSON(http.StatusBadRequest, err.Error())
 	}
-	if err := w.u.UserPut(u); err != nil {
+	if err := w.user.UserPut(u); err != nil {
 		return c.JSON(http.StatusInternalServerError, err.Error())
 	}
 	return c.JSON(http.StatusOK, u)
@@ -46,7 +46,7 @@ func (w *Web) UserUpdate(c echo.Context) error {
 
 func (w *Web) UserDelete(c echo.Context) error {
 	id := c.Param("id")
-	if err := w.u.UserDelete([]byte(id)); err != nil {
+	if err := w.user.UserDelete([]byte(id)); err != nil {
 		return c.JSON(http.StatusNotFound, err.Error())
 	}
 	return c.JSON(http.StatusOK, id)

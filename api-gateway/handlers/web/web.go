@@ -7,18 +7,20 @@ import (
 )
 
 type Web struct {
-	e     *echo.Echo
-	nconn *nats.Conn
-	u     events.UserPublisher
-	r     events.RolePublisher
+	e          *echo.Echo
+	nconn      *nats.Conn
+	user       events.UserPublisher
+	role       events.RolePublisher
+	permission events.PermissionPublisher
 }
 
 func NewWeb(echo *echo.Echo, nc *nats.Conn, pub *events.Pub) *Web {
 	return &Web{
-		e:     echo,
-		nconn: nc,
-		u:     pub,
-		r:     pub,
+		e:          echo,
+		nconn:      nc,
+		user:       pub,
+		role:       pub,
+		permission: pub,
 	}
 }
 

@@ -10,6 +10,7 @@ type Web struct {
 	e     *echo.Echo
 	nconn *nats.Conn
 	u     events.UserPublisher
+	r     events.RolePublisher
 }
 
 func NewWeb(echo *echo.Echo, nc *nats.Conn, pub *events.Pub) *Web {
@@ -17,13 +18,14 @@ func NewWeb(echo *echo.Echo, nc *nats.Conn, pub *events.Pub) *Web {
 		e:     echo,
 		nconn: nc,
 		u:     pub,
+		r:     pub,
 	}
 }
 
 func (w *Web) All() {
 	u := w.e.Group("/users")
 	u.POST("/", w.UserCreate)
-	u.GET("/:id", w.UserGet)
+	u.GET("/:id", w.UserRead)
 	u.PUT("/", w.UserUpdate)
 	u.DELETE("/:id", w.UserDelete)
 }

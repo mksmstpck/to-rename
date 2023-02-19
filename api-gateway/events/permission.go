@@ -7,14 +7,7 @@ import (
 	"github.com/mksmstpck/to-rename/api-gateway/models"
 )
 
-type PermissionPublisher interface {
-	PermissionGet(id []byte) (models.Permission, error)
-	PermissionPost(permission models.Permission) error
-	PermissionPut(permission models.Permission) error
-	PermissionDelete(id []byte) error
-}
-
-func (p Pub) PermissionGet(id []byte) (models.Permission, error) {
+func (p Permission) PermissionGet(id []byte) (models.Permission, error) {
 	var permission models.Permission
 	m, err := p.conn.Request("permission-get", id, 10*time.Millisecond)
 	if err != nil {
@@ -24,7 +17,7 @@ func (p Pub) PermissionGet(id []byte) (models.Permission, error) {
 	return permission, nil
 }
 
-func (p Pub) PermissionPost(permission models.Permission) error {
+func (p Permission) PermissionPost(permission models.Permission) error {
 	var res models.Response
 	permissionBytes, err := sonic.Marshal(permission)
 	if err != nil {
@@ -41,7 +34,7 @@ func (p Pub) PermissionPost(permission models.Permission) error {
 	return err
 }
 
-func (p Pub) PermissionPut(permission models.Permission) error {
+func (p Permission) PermissionPut(permission models.Permission) error {
 	var res models.Response
 	permissionBytes, err := sonic.Marshal(permission)
 	if err != nil {
@@ -58,7 +51,7 @@ func (p Pub) PermissionPut(permission models.Permission) error {
 	return err
 }
 
-func (p Pub) PermissionDelete(id []byte) error {
+func (p Permission) PermissionDelete(id []byte) error {
 	var res models.Response
 	m, err := p.conn.Request("permission-delete", id, 10*time.Millisecond)
 	if err != nil {

@@ -7,7 +7,7 @@ import (
 	"github.com/mksmstpck/to-rename/api-gateway/models"
 )
 
-func (w *Web) PermissionCreate(c echo.Context) error {
+func (h *Handlers) PermissionCreate(c echo.Context) error {
 	var p models.Permission
 	if err := c.Bind(&p); err != nil {
 		return err
@@ -15,22 +15,22 @@ func (w *Web) PermissionCreate(c echo.Context) error {
 	if err := c.Validate(&p); err != nil {
 		return c.JSON(http.StatusBadRequest, err.Error())
 	}
-	if err := w.permission.PermissionPost(p); err != nil {
+	if err := h.permission.PermissionPost(p); err != nil {
 		return c.JSON(http.StatusInternalServerError, err.Error())
 	}
 	return c.JSON(http.StatusCreated, p)
 }
 
-func (w *Web) PermissionRead(c echo.Context) error {
+func (h *Handlers) PermissionRead(c echo.Context) error {
 	id := c.Param("id")
-	p, err := w.permission.PermissionGet([]byte(id))
+	p, err := h.permission.PermissionGet([]byte(id))
 	if err != nil {
 		return c.JSON(http.StatusNotFound, err.Error())
 	}
 	return c.JSON(http.StatusOK, p)
 }
 
-func (w *Web) PermissionUpdate(c echo.Context) error {
+func (h *Handlers) PermissionUpdate(c echo.Context) error {
 	var p models.Permission
 	if err := c.Bind(&p); err != nil {
 		return err
@@ -38,15 +38,15 @@ func (w *Web) PermissionUpdate(c echo.Context) error {
 	if err := c.Validate(&p); err != nil {
 		return c.JSON(http.StatusBadRequest, err.Error())
 	}
-	if err := w.permission.PermissionPut(p); err != nil {
+	if err := h.permission.PermissionPut(p); err != nil {
 		return c.JSON(http.StatusInternalServerError, err.Error())
 	}
 	return c.JSON(http.StatusOK, p)
 }
 
-func (w *Web) PermissionDelete(c echo.Context) error {
+func (h *Handlers) PermissionDelete(c echo.Context) error {
 	id := c.Param("id")
-	if err := w.permission.PermissionDelete([]byte(id)); err != nil {
+	if err := h.permission.PermissionDelete([]byte(id)); err != nil {
 		return c.JSON(http.StatusNotFound, err.Error())
 	}
 	return c.JSON(http.StatusOK, id)

@@ -6,41 +6,42 @@ import (
 	"github.com/nats-io/nats.go"
 )
 
-type Web struct {
+type Handlers struct {
 	e          *echo.Echo
 	nconn      *nats.Conn
-	user       events.UserPublisher
-	role       events.RolePublisher
-	permission events.PermissionPublisher
+	user       events.Users
+	role       events.Roles
+	permission events.Permissions
 }
 
-func NewWeb(echo *echo.Echo, nc *nats.Conn, pub *events.Pub) *Web {
-	return &Web{
+func NewHandlers(echo *echo.Echo, nc *nats.Conn, user *events.User, role *events.Role, permission *events.Permission) *Handlers {
+	return &Handlers{
 		e:          echo,
 		nconn:      nc,
-		user:       pub,
-		role:       pub,
-		permission: pub,
+		user:       user,
+		role:       role,
+		permission: permission,
 	}
 }
 
-func (w *Web) All() {
-	user := w.e.Group("/users")
-	role := w.e.Group("/roles")
-	permission := w.e.Group("/permissions")
+func (h *Handlers) All() {
+	// grougs
+	user := h.e.Group("/users")
+	role := h.e.Group("/roles")
+	permission := h.e.Group("/permissions")
 	// user endpoints
-	user.POST("/", w.UserCreate)
-	user.GET("/:id", w.UserRead)
-	user.PUT("/", w.UserUpdate)
-	user.DELETE("/:id", w.UserDelete)
+	user.POST("/", h.UserCreate)
+	user.GET("/:id", h.UserRead)
+	user.PUT("/", h.UserUpdate)
+	user.DELETE("/:id", h.UserDelete)
 	// role endpoints
-	role.POST("/", w.RoleCreate)
-	role.GET("/:id", w.RoleRead)
-	role.PUT("/", w.RoleUpdate)
-	role.DELETE("/:id", w.RoleDelete)
+	role.POST("/", h.RoleCreate)
+	role.GET("/:id", h.RoleRead)
+	role.PUT("/", h.RoleUpdate)
+	role.DELETE("/:id", h.RoleDelete)
 	// permission endpoints
-	permission.POST("/", w.PermissionCreate)
-	permission.GET("/:id", w.PermissionRead)
-	permission.PUT("/", w.PermissionUpdate)
-	permission.DELETE("/:id", w.PermissionDelete)
+	permission.POST("/", h.PermissionCreate)
+	permission.GET("/:id", h.PermissionRead)
+	permission.PUT("/", h.PermissionUpdate)
+	permission.DELETE("/:id", h.PermissionDelete)
 }

@@ -24,8 +24,10 @@ func main() {
 
 	//starts echo
 	e := echo.New()
-	pub := events.NewPub(nc)
-	handlers := handlers.NewWeb(e, nc, pub)
+	userEvent := events.NewUserEvent(nc)
+	roleEvent := events.NewRoleEvent(nc)
+	permissionEvent := events.NewPermissionEvent(nc)
+	handlers := handlers.NewHandlers(e, nc, userEvent, roleEvent, permissionEvent)
 	handlers.All()
 	e.Logger.Fatal(e.Start(config.EchoUrl))
 }

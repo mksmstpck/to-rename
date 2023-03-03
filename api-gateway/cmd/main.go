@@ -4,6 +4,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/mksmstpck/to-rename/api-gateway/config"
 	"github.com/mksmstpck/to-rename/api-gateway/events"
+	validator "github.com/mksmstpck/to-rename/api-gateway/handlers/validators"
 	handlers "github.com/mksmstpck/to-rename/api-gateway/handlers/web"
 	"github.com/nats-io/nats.go"
 )
@@ -24,6 +25,7 @@ func main() {
 
 	//starts echo
 	e := echo.New()
+	e.Validator = validator.NewCustomeValidator()
 	userEvent := events.NewUserEvent(nc)
 	roleEvent := events.NewRoleEvent(nc)
 	permissionEvent := events.NewPermissionEvent(nc)

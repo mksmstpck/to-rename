@@ -2,52 +2,64 @@ package handlers
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/labstack/echo/v4"
 	"github.com/mksmstpck/to-rename/api-gateway/models"
 )
 
-func (w *Web) PermissionCreate(c echo.Context) error {
-	var p models.Permission
+func (h *Handlers) PermissionCreate(c echo.Context) error {
+	p := new(models.Permission)
 	if err := c.Bind(&p); err != nil {
 		return err
 	}
 	if err := c.Validate(&p); err != nil {
-		return c.JSON(http.StatusBadRequest, err.Error())
+		return c.JSON(http.StatusBadRequest, models.Message{Message: err.Error()})
 	}
-	if err := w.permission.PermissionPost(p); err != nil {
-		return c.JSON(http.StatusInternalServerError, err.Error())
+	if err := h.permission.PermissionPost(p); err != nil {
+		return c.JSON(http.StatusInternalServerError, "internal server error")
 	}
 	return c.JSON(http.StatusCreated, p)
 }
 
-func (w *Web) PermissionRead(c echo.Context) error {
+func (h *Handlers) PermissionIdRead(c echo.Context) error {
 	id := c.Param("id")
-	p, err := w.permission.PermissionGet([]byte(id))
+	idInt, err := strconv.Atoi(id)
 	if err != nil {
-		return c.JSON(http.StatusNotFound, err.Error())
+		return c.JSON(http.StatusNotFound, models.Message{Message: err.Error()})
+	}
+	p, err := h.permission.PermissionGet(int32(idInt))
+	if p.ID == 0 {
+		return c.JSON(http.StatusNotFound, models.Message{Message: "permission not found"})
+	}
+	if err != nil {
+		return c.JSON(http.StatusNotFound, models.Message{Message: err.Error()})
 	}
 	return c.JSON(http.StatusOK, p)
 }
 
-func (w *Web) PermissionUpdate(c echo.Context) error {
-	var p models.Permission
+func (h *Handlers) PermissionUpdate(c echo.Context) error {
+	p := new(models.Permission)
 	if err := c.Bind(&p); err != nil {
 		return err
 	}
 	if err := c.Validate(&p); err != nil {
-		return c.JSON(http.StatusBadRequest, err.Error())
+		return c.JSON(http.StatusBadRequest, models.Message{Message: err.Error()})
 	}
-	if err := w.permission.PermissionPut(p); err != nil {
-		return c.JSON(http.StatusInternalServerError, err.Error())
+	if err := h.permission.PermissionPut(p); err != nil {
+		return c.JSON(http.StatusNotFound, models.Message{Message: err.Error()})
 	}
-	return c.JSON(http.StatusOK, p)
+	return c.JSON(http.StatusNoContent, nil)
 }
 
-func (w *Web) PermissionDelete(c echo.Context) error {
+func (h *Handlers) PermissionDelete(c echo.Context) error {
 	id := c.Param("id")
-	if err := w.permission.PermissionDelete([]byte(id)); err != nil {
-		return c.JSON(http.StatusNotFound, err.Error())
+	idInt, err := strconv.Atoi(id)
+	if err != nil {
+		return c.JSON(http.StatusNotFound, models.Message{Message: err.Error()})
 	}
-	return c.JSON(http.StatusOK, id)
+	if err := h.permission.PermissionDelete(int32(idInt)); err != nil {
+		return c.JSON(http.StatusNotFound, models.Message{Message: err.Error()})
+	}
+	return c.JSON(http.StatusOK, models.Message{Message: id})
 }

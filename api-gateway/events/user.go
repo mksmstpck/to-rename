@@ -1,67 +1,74 @@
 package events
 
 import (
-	"log"
+	"errors"
 	"time"
 
-	"github.com/bytedance/sonic"
 	"github.com/mksmstpck/to-rename/api-gateway/models"
 )
 
-func (u User) UserGet(id []byte) (models.User, error) {
+func (u User) UserEmailGet(email string) (models.User, error) {
 	var user models.User
-	log.Println("user send request")
-	m, err := u.conn.Request("users-get", id, 60*time.Second)
+	err := u.conn.Request("users-email-get", email, &user, time.Second)
 	if err != nil {
 		return user, err
 	}
-	sonic.Unmarshal(m.Data, &user)
 	return user, nil
 }
 
-func (u User) UserPost(user models.User) error {
-	//	var res models.Response
-	userBytes, err := sonic.Marshal(&user)
+func (u User) UserUsernameGet(username string) (models.User, error) {
+	var user models.User
+	err := u.conn.Request("users-username-get", username, &user, time.Second)
 	if err != nil {
-		return err
+		return user, err
 	}
-	_, err = u.conn.Request("users-post", userBytes, 10*time.Millisecond)
-	if err != nil {
-		return err
-	}
-	//	sonic.Unmarshal(m.Data, &res)
-	//	if res.Status == "ok" {
-	//		return nil
-	//	}
-	return err
+	return user, nil
 }
 
-func (u User) UserPut(user models.User) error {
-	var res models.Response
-	userBytes, err := sonic.Marshal(user)
+func (u User) UserIdGet(id int32) (models.User, error) {
+	var user models.User
+	err := u.conn.Request("users-id-get", id, &user, time.Second)
 	if err != nil {
-		return err
+		return user, err
 	}
-	m, err := u.conn.Request("users-put", userBytes, 10*time.Millisecond)
-	if err != nil {
-		return err
-	}
-	sonic.Unmarshal(m.Data, &res)
-	if res.Status == "ok" {
-		return nil
-	}
-	return err
+	return user, nil
 }
 
-func (u User) UserDelete(id []byte) error {
+func (u User) UserPost(user *models.User) error {
 	var res models.Response
-	m, err := u.conn.Request("users-delete", id, 10*time.Millisecond)
+	err := u.conn.Request("users-post", user, &res, time.Second)
 	if err != nil {
 		return err
 	}
-	sonic.Unmarshal(m.Data, &res)
 	if res.Status == "ok" {
 		return nil
+	} else {
+		return errors.New(res.Message)
 	}
-	return err
+}
+
+func (u User) UserPut(user *models.User) error {
+	var res models.Response
+	err := u.conn.Request("users-put", user, &res, time.Second)
+	if err != nil {
+		return err
+	}
+	if res.Status == "ok" {
+		return nil
+	} else {
+		return errors.New(res.Message)
+	}
+}
+
+func (u User) UserDelete(id int32) error {
+	var res models.Response
+	err := u.conn.Request("users-delete", id, &res, time.Second)
+	if err != nil {
+		return err
+	}
+	if res.Status == "ok" {
+		return nil
+	} else {
+		return errors.New(res.Message)
+	}
 }

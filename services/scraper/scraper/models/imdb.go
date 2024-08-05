@@ -1,10 +1,4 @@
-package scrapModels
-
-type MovieShort struct {
-	Name       string
-	NameEn     string
-	PosterLink string
-}
+package scraper
 
 type MovieFull struct {
 	Name        string

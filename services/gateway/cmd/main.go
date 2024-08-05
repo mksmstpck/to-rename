@@ -5,9 +5,7 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/gocolly/colly/v2"
-	"github.com/mksmstpck/to-rename/internal/scraper"
-	"github.com/mksmstpck/to-rename/internal/views"
+	"github.com/mksmstpck/to-rename/services/gateway/views"
 	"github.com/sirupsen/logrus"
 )
 
@@ -30,9 +28,9 @@ func formatFilePath(path string) string {
 }
 
 func main() {
-	c := colly.NewCollector(colly.AllowedDomains("uaserials.pro"))
+	//	c := colly.NewCollector(colly.AllowedDomains("uaserials.pro"))
 
-	scraper.NewScraper(c, "https://uaserials.pro").Uaserials.ScrapOneMovie("/8599-barva-purpurova-2023.html")
+	//	scraper.NewScraper(c, "https://uaserials.pro").Uaserials.ScrapOneMovie("/8599-barva-purpurova-2023.html")
 
 	views.NewHandler().HandleAll()
 }

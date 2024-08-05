@@ -2,25 +2,20 @@ package scraper
 
 import "github.com/gocolly/colly/v2"
 
-type UaserialsScrapers interface {
+type Uaserials interface {
 	ScrapMainPage()
 	ScrapOneMovie(URLPath string)
 }
 
-type UaserialsScraper struct {
-	c       *colly.Collector
-	rootUrl string
-}
-
-func NewUaserialsScraper(c *colly.Collector, rootUrl string) UaserialsScrapers {
-	return &UaserialsScraper{
+func NewUaserialsScraper(c *colly.Collector, rootUrl string) Uaserials {
+	return &Uaserialer{
 		c:       c,
 		rootUrl: rootUrl,
 	}
 }
 
 type Scraper struct {
-	Uaserials UaserialsScrapers
+	Uaserials Uaserials
 }
 
 func NewScraper(c *colly.Collector, uaserialsRootUrl string) *Scraper {

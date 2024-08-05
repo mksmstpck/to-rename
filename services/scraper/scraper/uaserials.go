@@ -5,11 +5,16 @@ import (
 	"strings"
 
 	"github.com/gocolly/colly/v2"
-	models "github.com/mksmstpck/to-rename/internal/scrapModels"
+	models "github.com/mksmstpck/to-rename/services/scraper/scraper/models"
 	"github.com/sirupsen/logrus"
 )
 
-func (s *UaserialsScraper) ScrapMainPage() {
+type Uaserialer struct {
+	c       *colly.Collector
+	rootUrl string
+}
+
+func (s *Uaserialer) ScrapMainPage() {
 	var titles []string
 
 	s.c.OnHTML("div.th-title.truncate", func(h *colly.HTMLElement) {
@@ -29,7 +34,7 @@ func (s *UaserialsScraper) ScrapMainPage() {
 	logrus.Println(titles)
 }
 
-func (s *UaserialsScraper) ScrapOneMovie(URLPath string) {
+func (s *Uaserialer) ScrapOneMovie(URLPath string) {
 	var m models.MovieFull
 
 	// parses name in ukrainian
